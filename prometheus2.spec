@@ -1,23 +1,25 @@
-%define debug_package %{nil}
+%define    debug_package %{nil}
 
-Name:    prometheus2
-Version: 2.20.0
-Release: 1%{?dist}
-Summary: The Prometheus 2.x monitoring system and time series database.
-License: ASL 2.0
-URL:     https://prometheus.io
+Name:      prometheus2
+Version:   2.20.0
+Release:   2
+Summary:   The Prometheus 2.x monitoring system and time series database.
+License:   ASL 2.0
+URL:       https://prometheus.io
 Conflicts: prometheus
 
 %ifarch aarch64
-%global hostarch  arm64
+%global    hostarch  arm64
 %endif
 %ifarch x86_64
-%global hostarch  amd64
+%global    hostarch  amd64
 %endif
 
-Source0: prometheus-%{version}.linux-%{hostarch}.tar.gz
-Source1: prometheus.service
-Source2: prometheus.default
+BuildRequires: systemd
+
+Source0:   prometheus-%{version}.linux-%{hostarch}.tar.gz
+Source1:   prometheus.service
+Source2:   prometheus.default
 
 %{?systemd_requires}
 Requires(pre): shadow-utils
@@ -76,5 +78,8 @@ exit 0
 %dir %attr(755, prometheus, prometheus)%{_sharedstatedir}/prometheus
 
 %changelog
+* Tue Dec 14 2021 konglidong <konglidong@uniontech.com> - 2.20.0-2
+- modify format and delete %dist
+
 * Tue Aug 11 2020 houjian <houjian@kylinos.cn> - 2.20.0-1
 - Init project prometheus
