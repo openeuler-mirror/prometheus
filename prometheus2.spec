@@ -2,7 +2,7 @@
 
 Name:    prometheus2
 Version: 2.20.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: The Prometheus 2.x monitoring system and time series database.
 License: ASL 2.0
 URL:     https://prometheus.io
@@ -19,6 +19,7 @@ Source0: prometheus-%{version}.linux-%{hostarch}.tar.gz
 Source1: prometheus.service
 Source2: prometheus.default
 
+BuildRequires: systemd
 %{?systemd_requires}
 Requires(pre): shadow-utils
 
@@ -76,5 +77,8 @@ exit 0
 %dir %attr(755, prometheus, prometheus)%{_sharedstatedir}/prometheus
 
 %changelog
+* Mon Feb 28 2022 wulei <wulei80@huawei.com> - 2.20.0-2
+- Fix %{_unitdir} not identified
+
 * Tue Aug 11 2020 houjian <houjian@kylinos.cn> - 2.20.0-1
 - Init project prometheus
