@@ -2,7 +2,7 @@
 
 Name:    prometheus2
 Version: 2.20.0
-Release: 2%{?dist}
+Release: 3
 Summary: The Prometheus 2.x monitoring system and time series database.
 License: ASL 2.0
 URL:     https://prometheus.io
@@ -77,6 +77,9 @@ exit 0
 %dir %attr(755, prometheus, prometheus)%{_sharedstatedir}/prometheus
 
 %changelog
+- Thu Mar 24 2022 yaoxin <yaoxin30@huawei.com> - 2.20.0-3
+- Delete release %{?dist}
+
 * Mon Feb 28 2022 wulei <wulei80@huawei.com> - 2.20.0-2
 - Fix %{_unitdir} not identified
 
