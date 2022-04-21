@@ -2,24 +2,19 @@
 
 Name:      prometheus2
 Version:   2.20.0
-Release:   2
+Release:   3
 Summary:   The Prometheus 2.x monitoring system and time series database.
 License:   ASL 2.0
 URL:       https://prometheus.io
 Conflicts: prometheus
 
-%ifarch aarch64
-%global    hostarch  arm64
-%endif
-%ifarch x86_64
-%global    hostarch  amd64
-%endif
 
 BuildRequires: systemd
 
-Source0:   prometheus-%{version}.linux-%{hostarch}.tar.gz
-Source1:   prometheus.service
-Source2:   prometheus.default
+Source0:   prometheus-%{version}.linux-arm64.tar.gz
+Source1:   prometheus-%{version}.linux-amd64.tar.gz
+Source2:   prometheus.service
+Source3:   prometheus.default
 
 %{?systemd_requires}
 Requires(pre): shadow-utils
@@ -31,7 +26,13 @@ configured targets at given intervals, evaluates rule expressions, displays the
 results, and can trigger alerts if some condition is observed to be true.
 
 %prep
-%setup -q -n prometheus-%{version}.linux-%{hostarch}
+%ifarch aarch64
+%setup -q -b 0 -n prometheus-%{version}.linux-arm64
+%endif
+
+%ifarch x86_64
+%setup -q -b 1 -n prometheus-%{version}.linux-amd64
+%endif
 
 %build
 /bin/true
@@ -45,10 +46,11 @@ for dir in console_libraries consoles; do
   for file in ${dir}/*; do
     install -D -m 644 ${file} %{buildroot}%{_datarootdir}/prometheus/${file}
   done
+
 done
 install -D -m 644 prometheus.yml %{buildroot}%{_sysconfdir}/prometheus/prometheus.yml
-install -D -m 644 %{SOURCE1} %{buildroot}%{_unitdir}/prometheus.service
-install -D -m 644 %{SOURCE2} %{buildroot}%{_sysconfdir}/default/prometheus
+install -D -m 644 %{SOURCE2} %{buildroot}%{_unitdir}/prometheus.service
+install -D -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/default/prometheus
 
 %pre
 getent group prometheus >/dev/null || groupadd -r prometheus
@@ -78,6 +80,9 @@ exit 0
 %dir %attr(755, prometheus, prometheus)%{_sharedstatedir}/prometheus
 
 %changelog
+* Wed Apr 20 2022 zhuang.li <zhuang.li@turbolinux.com.cn>
+- Modify the schema judgment, resulting in compilation failure
+
 * Tue Dec 14 2021 konglidong <konglidong@uniontech.com> - 2.20.0-2
 - modify format and delete %dist
 
