@@ -2,7 +2,7 @@
 
 Name:      prometheus2
 Version:   2.20.0
-Release:   3
+Release:   4
 Summary:   The Prometheus 2.x monitoring system and time series database.
 License:   ASL 2.0
 URL:       https://prometheus.io
@@ -15,6 +15,7 @@ Source0:   prometheus-%{version}.linux-arm64.tar.gz
 Source1:   prometheus-%{version}.linux-amd64.tar.gz
 Source2:   prometheus.service
 Source3:   prometheus.default
+Source4:   prometheus-%{version}.linux-riscv64.tar.gz
 
 %{?systemd_requires}
 Requires(pre): shadow-utils
@@ -32,6 +33,10 @@ results, and can trigger alerts if some condition is observed to be true.
 
 %ifarch x86_64
 %setup -q -b 1 -n prometheus-%{version}.linux-amd64
+%endif
+
+%ifarch riscv64
+%setup -q -b 4 -n prometheus-%{version}.linux-riscv64
 %endif
 
 %build
@@ -80,7 +85,10 @@ exit 0
 %dir %attr(755, prometheus, prometheus)%{_sharedstatedir}/prometheus
 
 %changelog
-* Wed Apr 20 2022 zhuang.li <zhuang.li@turbolinux.com.cn>
+* Thu Nov 24 2022 misaka00251 <liuxin@iscas.ac.cn> - 2.20.0-4
+- Fix changelog & Add riscv64 support
+
+* Wed Apr 20 2022 zhuang.li <zhuang.li@turbolinux.com.cn> - 2.20.0-3
 - Modify the schema judgment, resulting in compilation failure
 
 * Tue Dec 14 2021 konglidong <konglidong@uniontech.com> - 2.20.0-2
