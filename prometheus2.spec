@@ -2,7 +2,7 @@
 
 Name:    prometheus2
 Version: 2.20.0
-Release: 3
+Release: 4
 Summary: The Prometheus 2.x monitoring system and time series database.
 License: ASL 2.0
 URL:     https://prometheus.io
@@ -13,6 +13,9 @@ Conflicts: prometheus
 %endif
 %ifarch x86_64
 %global hostarch  amd64
+%endif
+%ifarch loongarch64
+%global hostarch  loong64
 %endif
 
 Source0: prometheus-%{version}.linux-%{hostarch}.tar.gz
@@ -77,6 +80,9 @@ exit 0
 %dir %attr(755, prometheus, prometheus)%{_sharedstatedir}/prometheus
 
 %changelog
+* Tue Jun  6 2023 Wenlong Zhang<zhangwenlong@loongson.cn> - 2.20.0-4
+- add loong64 support for prometheus
+
 - Thu Mar 24 2022 yaoxin <yaoxin30@huawei.com> - 2.20.0-3
 - Delete release %{?dist}
 
