@@ -2,7 +2,7 @@
 
 Name:      prometheus2
 Version:   2.20.0
-Release:   3
+Release:   4
 Summary:   The Prometheus 2.x monitoring system and time series database.
 License:   ASL 2.0
 URL:       https://prometheus.io
@@ -13,8 +13,9 @@ BuildRequires: systemd
 
 Source0:   prometheus-%{version}.linux-arm64.tar.gz
 Source1:   prometheus-%{version}.linux-amd64.tar.gz
-Source2:   prometheus.service
-Source3:   prometheus.default
+Source2:   prometheus-%{version}.linux-loong64.tar.gz
+Source3:   prometheus.service
+Source4:   prometheus.default
 
 %{?systemd_requires}
 Requires(pre): shadow-utils
@@ -34,6 +35,10 @@ results, and can trigger alerts if some condition is observed to be true.
 %setup -q -b 1 -n prometheus-%{version}.linux-amd64
 %endif
 
+%ifarch loongarch64
+%setup -q -b 2 -n prometheus-%{version}.linux-loong64
+%endif
+
 %build
 /bin/true
 
@@ -49,8 +54,8 @@ for dir in console_libraries consoles; do
 
 done
 install -D -m 644 prometheus.yml %{buildroot}%{_sysconfdir}/prometheus/prometheus.yml
-install -D -m 644 %{SOURCE2} %{buildroot}%{_unitdir}/prometheus.service
-install -D -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/default/prometheus
+install -D -m 644 %{SOURCE3} %{buildroot}%{_unitdir}/prometheus.service
+install -D -m 644 %{SOURCE4} %{buildroot}%{_sysconfdir}/default/prometheus
 
 %pre
 getent group prometheus >/dev/null || groupadd -r prometheus
@@ -80,6 +85,9 @@ exit 0
 %dir %attr(755, prometheus, prometheus)%{_sharedstatedir}/prometheus
 
 %changelog
+* Tue Jun  6 2023 Wenlong Zhang<zhangwenlong@loongson.cn> - 2.20.0-4
+- add loong64 support for prometheus
+
 * Wed Apr 20 2022 zhuang.li <zhuang.li@turbolinux.com.cn>
 - Modify the schema judgment, resulting in compilation failure
 
