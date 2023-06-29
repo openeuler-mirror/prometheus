@@ -2,7 +2,7 @@
 
 Name:      prometheus2
 Version:   2.20.0
-Release:   3
+Release:   4
 Summary:   The Prometheus 2.x monitoring system and time series database.
 License:   ASL 2.0
 URL:       https://prometheus.io
@@ -30,7 +30,7 @@ results, and can trigger alerts if some condition is observed to be true.
 %setup -q -b 0 -n prometheus-%{version}.linux-arm64
 %endif
 
-%ifarch x86_64
+%ifarch x86_64 riscv64
 %setup -q -b 1 -n prometheus-%{version}.linux-amd64
 %endif
 
@@ -80,6 +80,9 @@ exit 0
 %dir %attr(755, prometheus, prometheus)%{_sharedstatedir}/prometheus
 
 %changelog
+* Tue Jun 20 2023 yoo <sunyuechi@iscas.ac.cn> - 2.20.0-4
+- add riscv support
+
 * Wed Apr 20 2022 zhuang.li <zhuang.li@turbolinux.com.cn>
 - Modify the schema judgment, resulting in compilation failure
 
